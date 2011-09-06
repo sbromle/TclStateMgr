@@ -1,7 +1,5 @@
-* MVTH -- Machine Vision Test Harness
+* StateMgr -- Manage Binary objects under Tcl with variable names.
 *************************************
 This purpose of this software is to provide
-a single test harness for the evaluation
-of machine vision filters and stereo
-algorithms while providing a graphical
-display of the results.
+a simple means to reference and interact with
+binary structures (in the C side) within a Tcl session.

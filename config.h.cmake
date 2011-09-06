@@ -12,14 +12,5 @@
 #cmakedefine PACKAGE_VERSION @PACKAGE_VERSION@
 /* Version number of package */
 #cmakedefine VERSION @VERSION@
-#cmakedefine MVTHIMAGE_VERSION @MVTHIMAGE_VERSION@
-#cmakedefine MVTHIMAGELIB "@MVTHIMAGELIB@"
-#cmakedefine TCLSCRIPTDIR "@TCLSCRIPTDIR@"
-/* BURIEDTARGETS library path */
-#cmakedefine MVTHIMAGE_LIBS @MVTHIMAGE_LIBS@
-/* Are we building with threads enabled?  (Not necessarily implemented) */
-#cmakedefine TCL_THREADS
 /* Use Tcl stubs  (Not necessarily implemented) */
 #cmakedefine USE_TCL_STUBS
-/* Use Tk stubs (Not necessarily implemented) */
-#cmakedefine USE_TK_STUBS
