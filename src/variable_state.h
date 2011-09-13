@@ -50,6 +50,7 @@ extern int varExistsTcl(Tcl_Interp *interp,
 		Tcl_Obj *CONST name);
 
 extern int varNames(Tcl_Interp *interp, StateManager_t statePtr);
+extern int varNamesList(Tcl_Interp *interp, StateManager_t statePtr, Tcl_Obj **list);
 /* generate a uniqe variable name */
 extern int varUniqName(Tcl_Interp *interp, StateManager_t statePtr, char *name);
 
