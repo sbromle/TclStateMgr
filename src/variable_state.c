@@ -110,6 +110,40 @@ int varNamesList(Tcl_Interp *interp, StateManager_t statePtr, Tcl_Obj **list)
 	return TCL_OK;
 }
 
+#define Tcl_HashSize(tablePtr) ((tablePtr)->numEntries)
+
+int varElements(Tcl_Interp *interp, StateManager_t statePtr, ClientData **elements, int *len)
+{
+	Tcl_HashEntry *entryPtr;
+	Tcl_HashSearch search;
+	int i;
+	int nelements;
+	ClientData *es=NULL;
+	ClientData val=NULL;
+
+
+	nelements=Tcl_HashSize(&statePtr->hash);
+	if (nelements==0) {
+		*elements=NULL;
+		*len=0;
+		return TCL_OK;
+	}
+	*len=nelements;
+	es=(ClientData*)calloc(nelements,sizeof(ClientData));
+	*elements=es;
+
+	/* Walk the hash table and store the data */
+	entryPtr=Tcl_FirstHashEntry(&statePtr->hash,&search);
+	i=0;
+	while (entryPtr!=NULL) {
+		val=Tcl_GetHashValue(entryPtr);
+		es[i]=val;
+		entryPtr=Tcl_NextHashEntry(&search);
+		i++;
+	}
+	return TCL_OK;
+}
+
 int varNames(Tcl_Interp *interp, StateManager_t statePtr)
 {
 	Tcl_Obj *list=NULL;
@@ -133,6 +167,52 @@ int varUniqName(Tcl_Interp *interp, StateManager_t statePtr, char *name)
 	};
 	return TCL_ERROR;
 }
+
+/* Search the elements in a hash, using a search function. The search function
+ * returns true when a match is found (or when progress should stop).
+ * Search function must have the prototype:
+ * int (*searchFunc)(ClientData element, ClientData clientData)
+ * where "element" will be the element passed from the Hash table, and "clientData"
+ * is any other data to be passed to the search function during the search.
+ *
+ * For example, let's assume one is storing pointers to integers in the hash,
+ * and one wishes to look for the first integer greater than some value,
+ * we could define a search function as:
+ * int int_thresh(ClientData element, ClientData threshPtr) {
+ *   int thresh=*((int*)threshPtr);
+ *   int val=*((int*)element);
+ *   if (val>thresh) return 1;
+ *   return 0;
+ * }
+ * and then call varSearch as:
+ * int thresh=5;
+ * varSearch(interp,statePtr,int_thresh,&thresh,&found);
+ * if (found!=NULL) {
+ *   printf("we found it!\n");
+ * }
+ */
+int varSearch(Tcl_Interp *interp, StateManager_t statePtr,
+		varSearchFunction searchFunc,
+		ClientData clientData,
+		ClientData *result)
+{
+	Tcl_HashEntry *entryPtr;
+	Tcl_HashSearch search;
+	ClientData val=NULL;
+
+	/* Walk the hash table and perform the test */
+	entryPtr=Tcl_FirstHashEntry(&statePtr->hash,&search);
+	while (entryPtr!=NULL) {
+		val=Tcl_GetHashValue(entryPtr);
+		if (searchFunc(val,clientData)==1) {
+			*result=val;
+			return TCL_OK;
+		}
+		entryPtr=Tcl_NextHashEntry(&search);
+	}
+	return TCL_OK;
+}
+
 
 int registerVar(Tcl_Interp *interp, StateManager_t statePtr,
 		ClientData data, char *name,

@@ -49,6 +49,16 @@ extern int varExistsTcl(Tcl_Interp *interp,
 		StateManager_t statePtr,
 		Tcl_Obj *CONST name);
 
+/** Return an array of all the elements in the hash, and the size of the array.
+ * Caller is responsible for freeing the returned array. The elements should not
+ * be freed, as they are still used by the hash table.
+ */
+extern int varElements(Tcl_Interp *interp, StateManager_t statePtr,
+		ClientData **elements, int *len);
+typedef int (*varSearchFunction)(ClientData element, ClientData clientData);
+extern int varSearch(Tcl_Interp *interp, StateManager_t statePtr,
+		varSearchFunction search_function,
+		ClientData clientData, ClientData *result);
 extern int varNames(Tcl_Interp *interp, StateManager_t statePtr);
 extern int varNamesList(Tcl_Interp *interp, StateManager_t statePtr, Tcl_Obj **list);
 /* generate a uniqe variable name */
