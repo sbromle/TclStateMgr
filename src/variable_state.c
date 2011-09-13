@@ -90,22 +90,12 @@ int varExistsTcl(Tcl_Interp *interp,
 	return TCL_OK;
 }
 
-int varNames(Tcl_Interp *interp, StateManager_t statePtr)
-{
-	Tcl_Obj *list=NULL;
-	if (varNamesList(interp, statePtr,&list)!=TCL_OK) return TCL_ERROR;
-	Tcl_SetObjResult(interp,list);
-	return TCL_OK;
-}
-
 int varNamesList(Tcl_Interp *interp, StateManager_t statePtr, Tcl_Obj **list)
 {   
     Tcl_HashEntry *entryPtr;
 	Tcl_HashSearch search;
 	Tcl_Obj *listPtr;
 	char *name;
-				    
-	if (*list!=NULL) Tcl_Free((char*)list);
 						    
 	/* Walk the hash table and build a list of names */
 	listPtr=Tcl_NewListObj(0,NULL);
@@ -117,6 +107,14 @@ int varNamesList(Tcl_Interp *interp, StateManager_t statePtr, Tcl_Obj **list)
 		entryPtr=Tcl_NextHashEntry(&search);
 	}
 	*list=listPtr;
+	return TCL_OK;
+}
+
+int varNames(Tcl_Interp *interp, StateManager_t statePtr)
+{
+	Tcl_Obj *list=NULL;
+	if (varNamesList(interp, statePtr,&list)!=TCL_OK) return TCL_ERROR;
+	Tcl_SetObjResult(interp,list);
 	return TCL_OK;
 }
 
