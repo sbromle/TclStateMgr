@@ -2,27 +2,26 @@
 #define VARSTATE_H
 
 /*
- * This file is part of MVTH - the Machine Vision Test Harness.
+ * This file is part of TclStateManager - a Tcl convenience wrapper
+ * for managing binary blobs on C side from within Tcl.
  *
  * Maintain variable contexts on Tcl side.
  *
  * Copyright (C) 2003,2004,2011 Samuel P. Bromley <sam@sambromley.com>
  *
- * This file is part of MVTH - the Machine Vision Test Harness.
- *
- * MVTH is free software: you can redistribute it and/or modify
+ * TclStateManager is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License Version 3,
  * as published by the Free Software Foundation.
  *
- * MVTH is distributed in the hope that it will be useful,
+ * TclStateManager is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * (see the file named "COPYING"), and a copy of the GNU Lesser General
- * Public License (see the file named "COPYING.LESSER") along with MVTH.
- * If not, see <http://www.gnu.org/licenses/>.
+ * Public License (see the file named "COPYING.LESSER") along with
+ * TclStateManager. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 

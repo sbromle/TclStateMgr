@@ -1,25 +1,24 @@
 /*
- * This file is part of MVTH - the Machine Vision Test Harness.
+ * This file is part of TclStateManager - a Tcl convenience wrapper
+ * for managing binary blobs on C side from within Tcl.
  *
  * Maintain variable contexts on Tcl side.
  *
  * Copyright (C) 2003,2004,2011 Samuel P. Bromley <sam@sambromley.com>
  *
- * This file is part of MVTH - the Machine Vision Test Harness.
- *
- * MVTH is free software: you can redistribute it and/or modify
+ * TclStateManager is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License Version 3,
  * as published by the Free Software Foundation.
  *
- * MVTH is distributed in the hope that it will be useful,
+ * TclStateManager is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * (see the file named "COPYING"), and a copy of the GNU Lesser General
- * Public License (see the file named "COPYING.LESSER") along with MVTH.
- * If not, see <http://www.gnu.org/licenses/>.
+ * Public License (see the file named "COPYING.LESSER") along with
+ * TclStateManager.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 #if HAVE_CONFIG_H
@@ -364,23 +363,3 @@ int InitializeStateManager(Tcl_Interp *interp, const char *key,
 	sprintf(state->prefix,"%s%s",cmd_name,"#%04d");
 	return TCL_OK;
 }
-
-/** Example usage:
-*
-* 	int MvthImageState_Init(Tcl_Interp *interp) {
-* 		InitializeStateManager(interp,MVTHIMAGESTATEKEY,"mi",
-* 		   MvthImageCmd,MvthImageDelete);
-* 		return TCL_OK;
-* 	}
-* 
-* So here we pass InitializeStateManager:
-* + A string defined in MVTHIMAGESTATEKEY
-*   that will be the string we use to re-attach to this stateManager from
-*   a Tcl Interpreter.
-* + A command name "mi", which will be the name of a new command that allows
-*   the user to query the new state manager.
-* + MvthImageCmd which is a pointer to a command that will handle
-*   calls to the new "mi" command that do not match the default subcommands.
-* + MvthImageDelete which is a pointer to a function that can delete
-*   the specific data structures stored in the hash table.
-*/
