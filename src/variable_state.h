@@ -71,6 +71,10 @@ typedef enum {REG_VAR_DELETE_OLD,
 extern int
 	registerVar(Tcl_Interp *interp, StateManager_t statePtr, ClientData data, char *name, REG_VAR_MODE mode);
 
+/* de-register a variable and free its resources */
+extern int varDelete0(Tcl_Interp *interp, StateManager_t statePtr,
+		Tcl_Obj *objName);
+
 extern int getVarFromObj(ClientData clientData, Tcl_Interp *interp, Tcl_Obj *CONST name,
 		void **iPtrPtr);
 extern int getVarFromObjKey(const char *state_key, Tcl_Interp *interp, Tcl_Obj *CONST name,

@@ -319,16 +319,7 @@ int StateManagerCmd(ClientData clientData, Tcl_Interp *interp,
 			break;
 		case DeleteIx:
 			if (objc!=3) goto err;
-			entryPtr=Tcl_FindHashEntry(&statePtr->hash,Tcl_GetString(objv[2]));
-			if (entryPtr==NULL) {
-				Tcl_AppendResult(interp,"Unknown var: ",
-						Tcl_GetString(objv[2]),NULL);
-				return TCL_ERROR;
-			}
-			iPtr=Tcl_GetHashValue(entryPtr);
-			statePtr->deleteProc(iPtr);
-			Tcl_DeleteHashEntry(entryPtr);
-			return TCL_OK;
+			return varDelete0(interp,statePtr, objv[2]);
 			break;
 		default:
 			return statePtr->unknownCmd(statePtr,interp,objc,objv);
@@ -338,6 +329,28 @@ int StateManagerCmd(ClientData clientData, Tcl_Interp *interp,
 err:
 	Tcl_WrongNumArgs(interp,1,objv,"option ?arg ...?");
 	return TCL_ERROR;
+}
+
+/* varDelete0 --
+ * Remove a variable from the state manager and free its resources.
+ * Results:
+ *  A standard Tcl command result.
+ */
+int varDelete0(Tcl_Interp *interp, StateManager_t statePtr,
+		Tcl_Obj *objName)
+{
+	void *iPtr=NULL;
+	Tcl_HashEntry *entryPtr=NULL;
+	entryPtr=Tcl_FindHashEntry(&statePtr->hash,Tcl_GetString(objName));
+	if (entryPtr==NULL) {
+		Tcl_AppendResult(interp,"Unknown var: ",
+				Tcl_GetString(objName),NULL);
+		return TCL_ERROR;
+	}
+	iPtr=Tcl_GetHashValue(entryPtr);
+	statePtr->deleteProc(iPtr);
+	Tcl_DeleteHashEntry(entryPtr);
+	return TCL_OK;
 }
 
 /* function to initialize state for a variable type */
