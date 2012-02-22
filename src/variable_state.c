@@ -300,7 +300,7 @@ int StateManagerCmd(ClientData clientData, Tcl_Interp *interp,
 		DeleteIx, ExistsIx, NamesIx};
 	int index;
 
-	if (objc==1 || objc>=6) {
+	if (objc<=1) {
 		Tcl_WrongNumArgs(interp,1,objv,"option ?arg ...?");
 		return TCL_ERROR;
 	}
