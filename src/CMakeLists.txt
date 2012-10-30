@@ -22,7 +22,7 @@ else (USE_TCL_STUBS)
 	target_link_libraries(statemgr ${TCL_LIBRARY})
 endif (USE_TCL_STUBS)
 
-set_target_properties (statemgr PROPERTIES VERSION 1.0 SOVERSION 1 INSTALL_RPATH_USE_LINK_PATH on)
+set_target_properties (statemgr PROPERTIES VERSION 1.0 SOVERSION 1 INSTALL_RPATH_USE_LINK_PATH on INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib/${PACKAGE}")
 
 ########### install files ###############
 
