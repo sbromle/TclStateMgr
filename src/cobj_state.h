@@ -83,8 +83,12 @@ extern int registerNewType(Tcl_Interp *interp, const char *type_name,
 			(ClientData, Tcl_Interp *, int, Tcl_Obj *CONST objv[])
 		);
 
+
 /* Hash a string to an integer using the FNV1a Hashing algorithm */
 extern uint64_t FNV1aHash(const char *str, int maxlen);
+/* Convenience macro for type hashing */
+#define TYPEHASH(a,b) FNV1aHash((a),(b))
+
 #ifdef __cplusplus
 }
 #endif
