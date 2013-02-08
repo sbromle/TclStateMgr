@@ -12,6 +12,8 @@ include_directories(.)
 set (libstatemgr_SRCS
 	variable_state.c
 	variable_state.h
+	cobj_state.c
+	cobj_state.h
 )
 
 add_library(statemgr SHARED ${libstatemgr_SRCS})
@@ -27,7 +29,7 @@ set_target_properties (statemgr PROPERTIES VERSION 1.0 SOVERSION 1 INSTALL_RPATH
 ########### install files ###############
 
 # Headers 
-install(FILES variable_state.h DESTINATION include/${PACKAGE})
+install(FILES variable_state.h cobj_state.h DESTINATION include/${PACKAGE})
 # Targets 
 install(TARGETS statemgr DESTINATION lib/${PACKAGE})
 
