@@ -62,6 +62,11 @@ typedef struct ObjCmdClientData {
 	InstanceCommandFunc instanceCommand;
 } ObjCmdClientData;
 
+/* Function that must be called to initialize the state
+ * manager.
+ */
+extern int cObjState_Init(Tcl_Interp *interp);
+
 // Means to retrieve objects in a friendly way;
 extern int getcObjFromObj(Tcl_Interp *interp, Tcl_Obj *CONST name,
 		const char *type_name, cObj **iPtrPtr);
@@ -77,6 +82,9 @@ extern int registerNewType(Tcl_Interp *interp, const char *type_name,
 		int (*instanceCommand)
 			(ClientData, Tcl_Interp *, int, Tcl_Obj *CONST objv[])
 		);
+
+/* Hash a string to an integer using the FNV1a Hashing algorithm */
+extern uint64_t FNV1aHash(const char *str, int maxlen);
 #ifdef __cplusplus
 }
 #endif

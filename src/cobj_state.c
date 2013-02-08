@@ -222,3 +222,16 @@ void cObjDelete(void *ptr)
 	return;
 }
 
+/* Hash a string to an integer using the FNV1a Hashing algorithm */
+uint64_t FNV1aHash(const char *str, int maxlen) {
+	int i;
+	uint64_t hash;
+	uint64_t FNV_offset_basis = 14695981039346656037U;
+	uint64_t FNV_Prime = 1099511628211U;
+	hash = FNV_offset_basis;
+	for (i=0;(i<maxlen || maxlen==-1) && *str!='\0';i++, str++) {
+		hash = hash ^ (uint64_t)(*str);
+		hash*=FNV_Prime;
+	}
+	return hash;
+}
