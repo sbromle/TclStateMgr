@@ -29,7 +29,7 @@ set_target_properties (statemgr PROPERTIES VERSION 1.0 SOVERSION 1 INSTALL_RPATH
 ########### install files ###############
 
 # Headers 
-install(FILES variable_state.h cobj_state.h DESTINATION include/${PACKAGE})
+install(FILES variable_state.h cobj_state.h helperwrapper.hpp DESTINATION include/${PACKAGE})
 # Targets 
 install(TARGETS statemgr DESTINATION lib/${PACKAGE})
 
