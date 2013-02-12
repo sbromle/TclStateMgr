@@ -50,6 +50,20 @@ wrapper<T>* makeWrapper(U* ptr) {
 
 // Gets the instance from a wrapper stored in cObj-compliant ClientData
 template<typename T>
+T* getFrom(cObj* cdata) {
+    wrapper<T>* wpr = reinterpret_cast<wrapper<T>*>(cdata->object);
+    return wpr->ptr;
+}
+
+// Gets the instance as a child class
+template<typename T, typename U>
+U* getFrom(cObj* cdata) {
+    wrapper<T>* wpr = reinterpret_cast<wrapper<T>*>(cdata->object);
+    return dynamic_cast<U*>(wpr->ptr);
+}
+
+// Gets the instance from a wrapper stored in cObj-compliant ClientData
+template<typename T>
 T* getFrom(ClientData data) {
     ObjCmdClientData* cdata = (ObjCmdClientData*)data;
     wrapper<T>* wpr = reinterpret_cast<wrapper<T>*>(cdata->mSelf->object);
