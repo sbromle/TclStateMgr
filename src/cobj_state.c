@@ -157,6 +157,7 @@ int cObjInstanceCmd(ClientData data, Tcl_Interp *interp,
 		          int objc, Tcl_Obj *CONST objv[])
 {
 	if (data==NULL) return TCL_ERROR;
+	if (objc==1) return TCL_OK; // No arguments were passed
 	ObjCmdClientData *cdata=(ObjCmdClientData*)data;
 	CONST char *subCmds[] = {"type",NULL};
 	enum cmdIx {TypeIx};
