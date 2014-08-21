@@ -14,8 +14,6 @@ set (libstatemgr_SRCS
 	variable_state.h
 	cobj_state.c
 	cobj_state.h
-	cobj_args.cpp
-	cobj_args.hpp
 )
 
 add_library(statemgr SHARED ${libstatemgr_SRCS})
@@ -31,7 +29,7 @@ set_target_properties (statemgr PROPERTIES VERSION 1.0 SOVERSION 1 INSTALL_RPATH
 ########### install files ###############
 
 # Headers 
-install(FILES variable_state.h cobj_state.h helperwrapper.hpp cobj_args.hpp DESTINATION include/${PACKAGE})
+install(FILES variable_state.h cobj_state.h helperwrapper.hpp DESTINATION include/${PACKAGE})
 # Targets 
 install(TARGETS statemgr DESTINATION lib)
 
