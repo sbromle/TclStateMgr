@@ -32,6 +32,10 @@
 #include <tcl.h>
 #include "variable_state.h"
 
+#ifdef WIN32
+#define snprintf _snprintf
+#endif
+
 /* generic state management structure. Maps var names to blobs.
  * Created once per interpreter */
 struct StateManager_s {

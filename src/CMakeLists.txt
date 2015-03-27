@@ -16,7 +16,12 @@ set (libstatemgr_SRCS
 	cobj_state.h
 )
 
-add_library(statemgr SHARED ${libstatemgr_SRCS})
+#MSVC needs static .lib files to work properly
+IF(WIN32 OR MSVC)
+	add_library(statemgr SHARED ${libstatemgr_SRCS})
+else(WIN32 OR MSVC)
+	add_library(statemgr SHARED ${libstatemgr_SRCS})
+ENDIF(WIN32 OR MSVC)
 
 if (USE_TCL_STUBS)
 	target_link_libraries(statemgr ${TCL_STUB_LIBRARY})
@@ -31,5 +36,4 @@ set_target_properties (statemgr PROPERTIES VERSION 1.0 SOVERSION 1 INSTALL_RPATH
 # Headers 
 install(FILES variable_state.h cobj_state.h helperwrapper.hpp DESTINATION include/${PACKAGE})
 # Targets 
-install(TARGETS statemgr DESTINATION lib)
-
+install(TARGETS statemgr DESTINATION lib COMPONENT libraries)

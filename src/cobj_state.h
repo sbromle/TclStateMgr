@@ -65,18 +65,18 @@ typedef struct ObjCmdClientData {
 /* Function that must be called to initialize the state
  * manager.
  */
-extern int cObjState_Init(Tcl_Interp *interp);
+extern int  DLLEXPORT cObjState_Init(Tcl_Interp *interp);
 
 // Means to retrieve objects in a friendly way;
-extern int getcObjFromObj(Tcl_Interp *interp, Tcl_Obj *CONST name,
+extern int  DLLEXPORT getcObjFromObj(Tcl_Interp *interp, Tcl_Obj *CONST name,
 		const char *type_name, cObj **iPtrPtr);
 
 /* the command bound to each instance */
-extern int cObjInstanceCmd(ClientData data, Tcl_Interp *interp,
+extern int  DLLEXPORT cObjInstanceCmd(ClientData data, Tcl_Interp *interp,
 		    int objc, Tcl_Obj *CONST objv[]);
 
 /* function to register new object types */
-extern int registerNewType(Tcl_Interp *interp, const char *type_name,
+extern int  DLLEXPORT registerNewType(Tcl_Interp *interp, const char *type_name,
 		int (*createObjFunc)
 			(ClientData, Tcl_Interp *, int, Tcl_Obj *CONST objv[], cObj **),
 		int (*instanceCommand)
@@ -85,7 +85,7 @@ extern int registerNewType(Tcl_Interp *interp, const char *type_name,
 
 
 /* Hash a string to an integer using the FNV1a Hashing algorithm */
-extern uint64_t FNV1aHash(const char *str, int maxlen);
+extern uint64_t  DLLEXPORT FNV1aHash(const char *str, int maxlen);
 /* Convenience macro for type hashing */
 #define TYPEHASH(a,b) FNV1aHash((a),(b))
 

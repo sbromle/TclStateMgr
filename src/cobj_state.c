@@ -32,6 +32,10 @@
 #include "variable_state.h"
 #include "cobj_state.h"
 
+#if defined ( WIN32 )
+#define __func__ __FUNCTION__
+#endif
+
 #define COBJSTATEKEY "cobjstate"
 
 // Forward declarations
@@ -119,8 +123,11 @@ int registerNewType(Tcl_Interp *interp,
 		CreateObjFunc createObjFunc,
 		InstanceCommandFunc instanceCommand)
 {
-	if (type_name==NULL || createObjFunc==NULL || instanceCommand==NULL)
+	if (type_name == NULL || createObjFunc == NULL || instanceCommand == NULL)
+	{
 		return TCL_ERROR;
+	}
+
 	if (num_reg_types >= max_num_reg_types) {
 		Tcl_AppendResult(interp,"No slots left to register new type `",
 				type_name,

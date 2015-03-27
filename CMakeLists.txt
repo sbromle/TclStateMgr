@@ -2,6 +2,8 @@ set (PACKAGE statemgr)
 project (${PACKAGE})
 cmake_minimum_required (VERSION 2.6)
 
+option (BUILD_SHARED_LIBS "Build Shared Libraries." ON)
+
 # Set up some variables that we can use in our code.
 set (VERSION 1.0)
 add_definitions (-DHAVE_CONFIG_H)
