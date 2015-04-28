@@ -277,7 +277,6 @@ int getVarFromObjKey(const char *state_key, Tcl_Interp *interp, Tcl_Obj *CONST n
 	return getVarFromObj(statePtr,interp,name,iPtrPtr);
 }
 
-
 /* StateManagerCmd --
  * This implements the StateManager command, which has these subcommands:
  * 	names ?pattern?
@@ -298,19 +297,21 @@ int StateManagerCmd(ClientData clientData, Tcl_Interp *interp,
 	/* the subCmd array defines the allowed values for
 	 * the subcommand.
 	 */
+	int index=-1;
 	CONST char *subCmds[] = {
 		"delete","exists","names",NULL};
 	enum StateCmdIx {
 		DeleteIx, ExistsIx, NamesIx};
-	int index;
 
 	if (objc<=1) {
 		Tcl_WrongNumArgs(interp,1,objv,"option ?arg ...?");
 		return TCL_ERROR;
 	}
 
-	if (Tcl_GetIndexFromObj(interp,objv[1],subCmds,"option",0,&index)!=TCL_OK)
+	if (Tcl_GetIndexFromObj(interp,objv[1],subCmds,"option",TCL_EXACT,&index)!=TCL_OK)
+	{
 		return statePtr->unknownCmd(clientData,interp,objc,objv);
+	}
 
 	switch (index) {
 		case ExistsIx:
