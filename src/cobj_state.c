@@ -112,12 +112,6 @@ int cObjCmd(ClientData data, Tcl_Interp *interp,
 	return TCL_ERROR;
 }
 
-static int max_num_reg_types = 100;
-static int num_reg_types = 0;
-static const char *reg_type_names[101]; /* max+1 to end in NULL */
-static CreateObjFunc reg_types_create_procs[100];
-static InstanceCommandFunc reg_types_instance_commands[100];
-
 int registerNewType(Tcl_Interp *interp,
 		const char *type_name,
 		CreateObjFunc createObjFunc,
@@ -128,27 +122,33 @@ int registerNewType(Tcl_Interp *interp,
 		return TCL_ERROR;
 	}
 
-	if (num_reg_types >= max_num_reg_types) {
+	StateManager_t statePtr=(StateManager_t)Tcl_GetAssocData(interp,COBJSTATEKEY,NULL);
+	if (statePtr==NULL) {
+		Tcl_AppendResult(interp,"No state stored by key `",COBJSTATEKEY,"'\n",NULL);
+		return TCL_ERROR;
+	}
+
+	if (statePtr->num_reg_types >= statePtr->max_num_reg_types) {
 		Tcl_AppendResult(interp,"No slots left to register new type `",
 				type_name,
 				"'\n",NULL);
 		return TCL_ERROR;
 	}
-	if (num_reg_types==0) {
+	if (statePtr->num_reg_types==0) {
 		/* this is a way to ensure that reg_type_names is initialied */
 		int i;
-		for (i=0;i<max_num_reg_types;i++) {
-			reg_type_names[i]=NULL;
-			reg_types_create_procs[i]=NULL;
-			reg_types_instance_commands[i]=NULL;
+		for (i=0;i<statePtr->max_num_reg_types;i++) {
+			statePtr->reg_type_names[i]=NULL;
+			statePtr->reg_types_create_procs[i]=NULL;
+			statePtr->reg_types_instance_commands[i]=NULL;
 		}
-		reg_type_names[max_num_reg_types]=NULL;
+		statePtr->reg_type_names[statePtr->max_num_reg_types]=NULL;
 	}
-	reg_types_create_procs[num_reg_types]=createObjFunc;
-	reg_types_instance_commands[num_reg_types]=instanceCommand;
-	reg_type_names[num_reg_types]=strdup(type_name);
-	reg_type_names[num_reg_types+1]=NULL;
-	num_reg_types++;
+	statePtr->reg_types_create_procs[statePtr->num_reg_types]=createObjFunc;
+	statePtr->reg_types_instance_commands[statePtr->num_reg_types]=instanceCommand;
+	statePtr->reg_type_names[statePtr->num_reg_types]=strdup(type_name);
+	statePtr->reg_type_names[statePtr->num_reg_types+1]=NULL;
+	statePtr->num_reg_types++;
 	return TCL_OK;
 }
 
@@ -204,9 +204,9 @@ int cObjCreate(ClientData data, Tcl_Interp *interp,
 
 	// Ceate object of the specified type
 	int index;
-	if (Tcl_GetIndexFromObj(interp,objv[2],reg_type_names,"type",0,&index)!=TCL_OK)
+	if (Tcl_GetIndexFromObj(interp,objv[2],statePtr->reg_type_names,"type",0,&index)!=TCL_OK)
 		return TCL_ERROR;
-	if (reg_types_create_procs[index](data,interp,objc,objv,&oPtr)!=TCL_OK)
+	if (statePtr->reg_types_create_procs[index](data,interp,objc,objv,&oPtr)!=TCL_OK)
 		return TCL_ERROR;
 	// Register it
 	registerVar(interp,statePtr,(ClientData)oPtr,name_ptr,REG_VAR_DELETE_OLD);
@@ -214,7 +214,7 @@ int cObjCreate(ClientData data, Tcl_Interp *interp,
 	cdata=(ObjCmdClientData*)ckalloc(sizeof(ObjCmdClientData));
 	cdata->state=statePtr;
 	cdata->mSelf=oPtr;
-	cdata->instanceCommand=reg_types_instance_commands[index];
+	cdata->instanceCommand=statePtr->reg_types_instance_commands[index];
 	Tcl_CreateObjCommand(interp,name_ptr,cObjInstanceCmd,(ClientData)cdata,NULL);
 
 	Tcl_AppendResult(interp,name_ptr,NULL);

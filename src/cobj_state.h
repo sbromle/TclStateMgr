@@ -37,6 +37,8 @@
 extern "C" {
 #endif
 
+typedef struct cObjStateContext *cObjStateContextPtr;
+
 /** A data structure that hold cvobject (which can be a camera, kinect, img,
  * ptcloud ...) */
 typedef struct cObj {
@@ -44,12 +46,9 @@ typedef struct cObj {
 	uint64_t type_hash; /**< a hash of the name of the type */
 	void *object;
 	void (*deleteFunc)(void *ptr);
+	cObjStateContextPtr *context;
 } cObj;
 
-typedef int (*CreateObjFunc)
-			(ClientData, Tcl_Interp *, int, Tcl_Obj *CONST objv[], cObj **);
-typedef int (*InstanceCommandFunc)
-			(ClientData, Tcl_Interp *, int, Tcl_Obj *CONST objv[]);
 /* a structure passed to clientData of Object commands,
  * which holds the overall Object states (to provide
  * access to other Objectvariables) as well
@@ -78,7 +77,7 @@ extern int  DLLEXPORT cObjInstanceCmd(ClientData data, Tcl_Interp *interp,
 /* function to register new object types */
 extern int  DLLEXPORT registerNewType(Tcl_Interp *interp, const char *type_name,
 		int (*createObjFunc)
-			(ClientData, Tcl_Interp *, int, Tcl_Obj *CONST objv[], cObj **),
+			(ClientData, Tcl_Interp *, int, Tcl_Obj *CONST objv[], void *),
 		int (*instanceCommand)
 			(ClientData, Tcl_Interp *, int, Tcl_Obj *CONST objv[])
 		);

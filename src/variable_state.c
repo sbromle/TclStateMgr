@@ -36,16 +36,6 @@
 #define snprintf _snprintf
 #endif
 
-/* generic state management structure. Maps var names to blobs.
- * Created once per interpreter */
-struct StateManager_s {
-	Tcl_HashTable hash; /* list of variables by name */
-	int uid;
-	char *prefix;
-	void (*deleteProc)(void *ptr);
-	int (*unknownCmd)(ClientData, Tcl_Interp *,int,Tcl_Obj *CONST objv[]);
-};
-
 /* this is called when the command associated with a state is destroyed.
  * The hash table is walked, destroying all variables as
  * you go, and then the HashTable itself is freed */
@@ -375,6 +365,12 @@ int InitializeStateManager(Tcl_Interp *interp, const char *key,
 	state->uid=0;
 	state->deleteProc=deleteProc;
 	state->unknownCmd=unknownCmd;
+	state->max_num_reg_types=100;
+	state->num_reg_types=0;
+	state->reg_type_names=(char**)ckalloc(101*sizeof(char*));
+	memset(state->reg_type_names,0,101*sizeof(char*));
+	state->reg_types_create_procs=(CreateObjFunc*)ckalloc(100*sizeof(CreateObjFunc));
+	state->reg_types_instance_commands=(InstanceCommandFunc*)ckalloc(100*sizeof(InstanceCommandFunc));
 	Tcl_CreateObjCommand(interp,cmd_name, StateManagerCmd, (ClientData)state,StateManagerDeleteProc);
 	int len=strlen(cmd_name);
 	state->prefix=(char*)ckalloc(len+6);

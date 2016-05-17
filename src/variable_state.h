@@ -38,6 +38,25 @@ extern "C" {
 #include <assert.h>
 #include <tcl.h>
 
+typedef int (*CreateObjFunc)
+			(ClientData, Tcl_Interp *, int, Tcl_Obj *CONST objv[], void *);
+typedef int (*InstanceCommandFunc)
+			(ClientData, Tcl_Interp *, int, Tcl_Obj *CONST objv[]);
+/* generic state management structure. Maps var names to blobs.
+ * Created once per interpreter */
+struct StateManager_s {
+	Tcl_HashTable hash; /* list of variables by name */
+	int uid;
+	char *prefix;
+	void (*deleteProc)(void *ptr);
+	int (*unknownCmd)(ClientData, Tcl_Interp *,int,Tcl_Obj *CONST objv[]);
+	int max_num_reg_types; /* 100 */
+	int num_reg_types; /* 0 */
+	char **reg_type_names; /* max+1 to end in NULL */
+	CreateObjFunc *reg_types_create_procs;
+	InstanceCommandFunc *reg_types_instance_commands;
+};
+
 /* generic state management structure. Maps var names to blobs.
  * Created once per interpreter */
 typedef struct StateManager_s *StateManager_t;
