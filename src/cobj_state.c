@@ -206,8 +206,11 @@ int cObjCreate(ClientData data, Tcl_Interp *interp,
 	int index;
 	if (Tcl_GetIndexFromObj(interp,objv[2],statePtr->reg_type_names,"type",0,&index)!=TCL_OK)
 		return TCL_ERROR;
-	if (statePtr->reg_types_create_procs[index](data,interp,objc,objv,&oPtr)!=TCL_OK)
+	oPtr=(cObj*)ckalloc(sizeof(cObj));
+	if (statePtr->reg_types_create_procs[index](data,interp,objc,objv,oPtr)!=TCL_OK) {
+		ckfree(oPtr);
 		return TCL_ERROR;
+	}
 	// Register it
 	registerVar(interp,statePtr,(ClientData)oPtr,name_ptr,REG_VAR_DELETE_OLD);
 	// make a command with the same name as this object 

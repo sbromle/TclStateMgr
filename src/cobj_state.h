@@ -44,6 +44,7 @@ typedef struct cObjStateContext *cObjStateContextPtr;
 typedef struct cObj {
 	char type_name[64]; /**< name of this object's type */
 	uint64_t type_hash; /**< a hash of the name of the type */
+	uint64_t refcount; /**< a reference count for optional resource management */
 	void *object;
 	void (*deleteFunc)(void *ptr);
 	cObjStateContextPtr *context;
