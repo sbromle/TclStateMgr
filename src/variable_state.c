@@ -354,6 +354,13 @@ int InitializeStateManager(Tcl_Interp *interp, const char *key,
 		int (*unknownCmd)(ClientData,Tcl_Interp*,int,Tcl_Obj *CONST objv[]),
 		void (*deleteProc)(void *ptr))
 {
+	//initialize the stubs before use
+	if(Tcl_InitStubs(interp,"8.6",0) == NULL)
+	{
+		return TCL_ERROR;
+	}
+
+
 	StateManager_t state=NULL;
 	if (NULL!=Tcl_GetAssocData(interp,key,NULL)) return TCL_OK;
 	/* otherwise, we need to create a new context and associate it with

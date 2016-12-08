@@ -5,6 +5,10 @@
 include  (FindTclStub)
 option (USE_TCL_STUBS "Enable use of TCL stubs library")
 
+if (USE_TCL_STUBS)
+ADD_DEFINITIONS("-DUSE_TCL_STUBS")
+endif(USE_TCL_STUBS)
+
 include_directories(${TCL_INCLUDE_PATH})
 include_directories(.)
 
